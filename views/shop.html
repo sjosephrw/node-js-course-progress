@@ -20,21 +20,43 @@
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
 
+    <link rel="stylesheet" href="/css/style.css">
+
 </head>
 <body>
     <header>
         <nav>
             <div class="container">
                 <div class="row">
-                    <div class="col-md-4"><a href="#"><i class="fas fa-th"></i></a></div>
-                    <div class="col-md-4 text-center"><a href="#">GEM BUSINESS&nbsp;<i class="far fa-gem"></i></a></div>
-                    <div class="col-md-4 text-right"><a href="#"><i class="fab fa-opencart"></i></a></div>
+                    <div class="col-4">
+                        <a href="#" class="toggle-menu">
+                            <i class="fas fa-times"></i>
+                            <i class="fas fa-th"></i>&nbsp;MENU
+                        </a>
+                    </div>
+                    <div class="col-4 text-center"><a href="/">GEM BUSINESS&nbsp;<i class="far fa-gem"></i></a></div>
+                    <div class="col-4 text-right"><a href="#"><i class="fas fa-shopping-bag"></i></a></div>
                 </div>
             </div>
         </nav>
+        <div class="main-menu">
+            <div class="main-menu-inner-container">
+                <ul class="links-main-menu">
+                    <li><a href="/"><div class="container"><div class="row">SHOP</div></div></a></li>
+                    <li><a href="/admin/add-product/"><div class="container"><div class="row">ADD PRODUCTS</div></div></a></li>
+                </ul>                    
+            </div>
+        </div>
     </header>
     <section class="section-welcome">
        
     </section>
 </body>
 </html>
+<script>
+    document.querySelector('.toggle-menu').addEventListener('click', (e)=>{
+        document.querySelector('.main-menu').classList.toggle('show');
+        document.querySelector('.fa-times').classList.toggle('show-inline');
+        document.querySelector('.fa-th').classList.toggle('hide');
+    });
+</script>

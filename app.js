@@ -14,6 +14,8 @@ const app = express();
 
 app.use(bodyParser.urlencoded({extended: false}));//necessary for req.body to work, {extended: false} - is necessary other wise the terminal displays a error
 
+app.use(express.static(path.join(__dirname, 'public')));//to use the css and js files in the public folder in the project root folder.
+
 app.use('/admin', adminRoutes);//importing the adminRoutes object.
 
 app.use(shopRoutes);//importing the shopRoutes object.

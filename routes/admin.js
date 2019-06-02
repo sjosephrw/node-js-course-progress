@@ -4,6 +4,8 @@ const path = require('path');
 //3rd party node modules
 const express = require('express');
 
+const rootDir = require('../util/path');//refer to the path.js file in util folder, constructs a tidy path to the root project folder.
+
 const router = express.Router();
 
 //it's best to write the url like /admin/add-product or /admin/product
@@ -11,7 +13,8 @@ const router = express.Router();
 
 //add-product => GET
 router.get('/add-product', (req, res, next)=>{
-    res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
+    //res.sendFile(path.join(__dirname, '../', 'views', 'add-product.html'));
+    res.sendFile(path.join(rootDir, 'views', 'add-product.html'));
 });
 
 //add-product => POST
