@@ -8,7 +8,7 @@
                     </a>
                 </div>
                 <div class="col-4 text-center"><a href="/">GEM BUSINESS&nbsp;<i class="far fa-gem"></i></a></div>
-                <div class="col-4 text-right"><a href="#"><i class="fas fa-shopping-bag"></i></a></div>
+                <div class="col-4 text-right"><a href="/cart"><i class="fas fa-shopping-bag"></i></a></div>
             </div>
         </div>
     </nav>
@@ -16,7 +16,9 @@
         <div class="main-menu-inner-container">
             <ul class="links-main-menu">
                 <li><a class="<%= path === '/' ? 'active' : '' %>" href="/"><div class="container"><div class="row">SHOP</div></div></a></li>
-                <li><a class="<%= path === '/admin/add-product/' ? 'active' : '' %>" href="/admin/add-product/"><div class="container"><div class="row">ADD PRODUCTS</div></div></a></li>
+                <li><a class="<%= path === '/products' ? 'active' : '' %>" href="/products"><div class="container"><div class="row">PRODUCTS</div></div></a></li>
+                <li><a class="<%= path === '/admin/add-product' ? 'active' : '' %>" href="/admin/add-product"><div class="container"><div class="row">ADD PRODUCTS</div></div></a></li>
+                <li><a class="<%= path === '/admin/products' ? 'active' : '' %>" href="/admin/products"><div class="container"><div class="row">ADMIN PRODUCTS</div></div></a></li>            
             </ul>                    
         </div>
     </div>

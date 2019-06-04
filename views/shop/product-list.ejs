@@ -1,14 +1,22 @@
-<%- include('includes/head.ejs') %>
+<%- include('../includes/head.ejs') %>
 
-    <%- include('includes/navigation.ejs') %>        
+    <%- include('../includes/navigation.ejs') %>        
     <section class="section-products">
     <div class="container">
     <div class="row">
-    <% if (prods.length > 0) { %>
+    <% 
+        if (prods.length > 0) { 
+        let i = 0;        
+    %>
 
-    <% for (let product of prods) { %>
 
-        <div class="col-12 col-sm-12 col-md-3 col-lg-3">
+
+    <% 
+        for (let product of prods) { 
+        i = i + 1;    
+    %>
+
+        <div class="col-12 col-sm-12 col-md-4 col-lg-4">
             <div class="card" style="width: 100%;font-size: 70% !important;">
             <div class="card-header">Header</div>
             <div class="card-body">
@@ -22,6 +30,14 @@
             <div class="card-footer">Footer</div>
             </div>
         </div>
+
+    <%
+        if (i > 0 && i % 3 === 0){
+    %>     
+        </div><div class="row" style="margin-top: 20px;">      
+    <%
+        }
+    %>
     <% } %>
     <% } else { %>
         <div class="col-12"><h5>No Products Found!</h5></div>
@@ -30,4 +46,4 @@
     </div>
 
     </section>
-<%- include('includes/end.ejs') %>
+<%- include('../includes/end.ejs') %>
