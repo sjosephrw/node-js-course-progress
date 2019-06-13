@@ -2,15 +2,56 @@
 
     <%- include('../includes/navigation.ejs') %>        
 
-    <section class="section-welcome">
+    <section class="section-products">
         <div class="container">
-            <div class="row">
-                <div class="col-12">
-                    <h3>Edit products.</h3>
+        <div class="row">
+        <% 
+            if (prods.length > 0) { 
+            let i = 0;        
+        %>
+    
+    
+    
+        <% 
+            for (let product of prods) { 
+            i = i + 1;    
+        %>
+    
+            <div class="col-12 col-sm-12 col-md-4 col-lg-4">
+                <div class="card" style="width: 100%;font-size: 70% !important;">
+                <div class="card-header">$<%= product.price %></div>
+                <div class="card-body">
+                    <img class="card-img-top" src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                    <div class="card-body">
+                        <h4 class="card-title text-center"><%= product.title %></h4>
+                        <p class="card-text text-center"><%= product.description %>.</p>
+                        <div style="width: 100%;">
+                            <div class="btn-group" style="width: 100%;">
+                                <a href="/admin/edit-product/<%= product.id %>?edit=true" class="btn btn-primary">Edit</a>
+                                <a href="/admin/delete-product/<%= product.id %>" class="btn btn-primary">Delete</a>
+                                <a href="#" class="btn btn-primary">Publish</a>
+                            </div>  
+                        </div>                 
+                    </div>                        
+                </div> 
+                <div class="card-footer">Footer</div>
                 </div>
             </div>
+    
+        <%
+            if (i > 0 && i % 3 === 0){
+        %>     
+            </div><div class="row" style="margin-top: 20px;">      
+        <%
+            }
+        %>
+        <% } %>
+        <% } else { %>
+            <div class="col-12"><h5>No Products Found!</h5></div>
+        <% } %>
         </div>
- 
-    </section>
+        </div>
+        <!--https://dummyimage.com/600x400/000/fff-->
+        </section>
 
 <%- include('../includes/end.ejs') %>

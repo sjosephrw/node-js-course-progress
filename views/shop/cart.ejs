@@ -5,8 +5,46 @@
     <section class="section-welcome">
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 text-center">
                     <h3>Cart.</h3>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <div class="list-group">
+
+                        <% if(products.length > 0){ 
+                            products.forEach(p => {
+ 
+                        %>    
+
+                        <li class="list-group-item" style="margin-top: 10px;">
+                            <div style="float: left;width: 70%;">
+                               <img src="https://dummyimage.com/150x150/000/fff" class="img-fluid" alt="product Image">
+                            </div>
+                            <div style="float: left;font-size: 70%;width: 20%;text-align: right;">
+                                <h5>
+                                    <%= p.productData.title %>
+                                </h5>
+                                <p>Price: $<%= p.productData.price %> </p>
+                                <p>Qty: <%= p.qty %></p>
+                                <p>Price extended: $3000</p>
+                            </div> 
+                            <div style="float: left;font-size: 70%;width: 10%;text-align: right;">
+                                <a href="/cart-delete-item/<%= p.productData.id %>">
+                                    <p><i class="far fa-times-circle text-danger" style="font-size: 400%;"></i></p>      
+                                </a>                             
+                            </div>                             
+                            <div class="clearfix"></div>                           
+                        </li>                     
+                        <% 
+                           
+                           });   
+                          
+                           } else { %>    
+                            <h5>No products to display.</h5>
+                        <% } %>    
+                        </div>
                 </div>
             </div>
         </div>
