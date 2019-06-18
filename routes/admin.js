@@ -6,7 +6,7 @@ const adminController = require('../controllers/admin');
 
 const router = express.Router();
 
-// /admin/add-product => GET
+// /admin/add-product => GET//display all the products for editing
 router.get('/add-product', adminController.getAddProduct);
 
 // /admin/add-product => POST

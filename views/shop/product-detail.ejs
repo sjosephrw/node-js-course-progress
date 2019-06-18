@@ -15,7 +15,7 @@
           <div class="col-md-8">
             <img class="img-fluid" src="https://dummyimage.com/750x500/000/fff" alt="">
             <form action="/cart" method="post">
-                <input type="hidden" name="productId" value="<%= product.id %>">
+                <input type="hidden" name="productId" value="<%= product._id %>">
                 <button type="submit" class="btn btn-info" style="width: 100%;margin-top: 20px;">ADD TO CART</button>
             </form>
           </div>
@@ -26,7 +26,7 @@
             <h3 class="my-3">Project Details</h3>
             <ul style="padding-left: 0;list-style: none;">
               <li>Price: $<%= product.price %></li>
-              <li>ID: <%= product.id %></li>
+              <li>ID: <%= product._id %></li>
             </ul>
 
           </div>
