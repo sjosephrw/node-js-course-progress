@@ -2,16 +2,32 @@
 
     <%- include('../includes/navigation.ejs') %>        
 
+    <section class="orders-header-img">
+        <div class="user-profile-image text-center" style="width: 100%;">
+            <img src="/img/bird.jpg" alt="User Image" class="img-thumbnail" height="100px" width="100px" style="margin-top: 100px;">
+        </div>
+    </section>
+
     <section class="section-welcome">
         <div class="container">
             <div class="row">
-                <div class="col-12">
+                <div class="col-12 text-center">
                     <h3>Orders</h3>
-                    <p>Login to view orders.</p>
+                    <p style="font-size: 90%;">These are the list of orders for Joseph Wimalasuriya. Click on the view icon on the far left to view individual orders.</p>
                 </div>
             </div>
         </div>
- 
+        <div class="container">
+        <div class="row">
+        <div class="col-12">        
+        <div class="list-group" style="font-size: 70%;">
+            <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;First item</a>
+            <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Second item</a>
+            <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;Third item</a>
+        </div>
+        </div>
+        </div>
+        </div>          
     </section>
 
 <%- include('../includes/end.ejs') %>

@@ -16,15 +16,32 @@
             <img class="img-fluid" src="https://dummyimage.com/750x500/000/fff" alt="">
             <form action="/cart" method="post">
                 <input type="hidden" name="productId" value="<%= product._id %>">
-                <button type="submit" class="btn btn-info" style="width: 100%;margin-top: 20px;">ADD TO CART</button>
+                <button type="submit" class="btn btn-outline-warning" style="width: 100%;margin-top: 20px;">ADD TO CART</button>
             </form>
+
+            <div class="card-header" style="margin-top: 40px; font-size: 70%;">
+                Product Reviews
+              </div>
+              <div class="card-body" style="font-size: 70%;">
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+                <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+                <hr>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+                <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+                <hr>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Omnis et enim aperiam inventore, similique necessitatibus neque non! Doloribus, modi sapiente laboriosam aperiam fugiat laborum. Sequi mollitia, necessitatibus quae sint natus.</p>
+                <small class="text-muted">Posted by Anonymous on 3/1/17</small>
+                <hr>
+                <a href="#" class="btn btn-success">Leave a Review</a>
+              </div>            
+
           </div>
       
           <div class="col-md-4">
             <h3 class="my-3">Description</h3>
-            <p><%= product.description %></p>
-            <h3 class="my-3">Project Details</h3>
-            <ul style="padding-left: 0;list-style: none;">
+            <p style="font-size: 70%;"><%= product.description %></p>
+            <h3 class="my-3">Product Details</h3>
+            <ul style="padding-left: 0;list-style: none;font-size: 70%;">
               <li>Price: $<%= product.price %></li>
               <li>ID: <%= product._id %></li>
             </ul>
@@ -35,7 +52,7 @@
         <!-- /.row -->
       
         <!-- Related Projects Row -->
-        <h3 class="my-4">Related Projects</h3>
+        <h3 class="my-4">Related Products</h3>
       
         <div class="row">
       

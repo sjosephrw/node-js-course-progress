@@ -13,9 +13,9 @@ exports.getProducts = (req, res, next) => {
         hasProducts: products.length > 0,
         activeProducts: true,
       });
-    }).catch( err => {
+  }).catch( err => {
         console.log(err);
-    });
+  });
 };
 
 exports.getProduct = (req, res, next) => {
@@ -49,27 +49,15 @@ exports.getIndex = (req, res, next) => {
 };
 
 exports.getCart = (req, res, next) => {
-  Cart.getCart(cart => {
-    Product.fetchAll(products => {
-
-      const cartProducts = [];
-
-      for (product of products){
-        const cartProductData = cart.products.find(prod => prod.id === product.id);
-
-        if (cartProductData){
-            cartProducts.push({productData: product, qty: cartProductData.qty});
-        }
-      
-      }
-      
+  req.user.getCart()
+  .then(cart => {
       res.render('shop/cart', {
-        pageTitle: 'Your cart',
-        path: '/cart',
-        products: cartProducts
+        products: cart,
+        pageTitle: 'Your shopping Cart',
+        path: '/cart'
       });      
-    });
-  });
+  })
+  .catch(err => {console.log(err);});
 };
 
 
@@ -94,17 +82,31 @@ exports.postCart = (req, res, next) => {
 
 exports.getCartDeleteProduct = (req, res, next) => {
   const prodId = req.params.productId;
-  Product.findById(prodId, product => {
-    Cart.deleteProduct(prodId, product.price);
-  });
-  res.redirect('/cart');  
+  req.user.deleteItemFromCart(prodId).then(result => {
+    res.redirect('/cart');  
+  })
+  .catch(err => {console.log(err);});
+};
+
+exports.createOrders = (req, res, next) => {
+  req.user.addOrder()
+  .then(result => {
+    res.redirect('/orders');      
+  })  
+  .catch(err => {console.log(err);});
 };
 
 exports.getOrders = (req, res, next) => {
-  res.render('shop/orders', {
-    pageTitle: 'My Orders',
-    path: '/orders'
-  });
+  req.user.getOrders()
+  .then(orders => {
+    res.render('shop/orders', {
+      pageTitle: 'My Orders',
+      path: '/orders',
+      orders: orders
+    })
+    .catch(err => {console.log(err);});
+  })
+
 
 };
 
