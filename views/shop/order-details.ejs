@@ -12,8 +12,8 @@
         <div class="container">
             <div class="row">
                 <div class="col-12 text-center">
-                    <h3>Orders</h3>
-                    <p style="font-size: 90%;">These are the list of orders for Joseph Wimalasuriya. Click on the view icon on the far left to view individual orders.</p>
+                    <h3>Order Details</h3>
+                    <p style="font-size: 90%;">These are the orderdetails for this order.</p>
                 </div>
             </div>
         </div>
@@ -22,14 +22,16 @@
         <div class="col-12">  
 
 <% if(orders.length > 0){ 
-    orders.forEach(order => {
 
+        orders.forEach(p => {
 %>           
         <div class="list-group" style="font-size: 70%;">
-            <a href="/order-details/<%= order._id %>" class="list-group-item list-group-item-action"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;ORDER ID - <%= order._id %></a>
+            <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;<%= p.product.title %> (Quantity - <%= p.quantity %>)&nbsp;<img style="float:right;" src="<%= p.product.imageUrl %>" alt="Product Image" width="100px" height="auto"></a>
+            <div class="clearfix"></div>
         </div>
-        <%  
+        <% 
         }); 
+
     } else { 
  %>    
      <h5>No Orders to display.</h5>
