@@ -1,0 +1,33 @@
+<%- include('../includes/head.ejs') %>
+
+    <%- include('../includes/navigation.ejs') %>     
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="wrapper fadeInDown">
+  <div id="formContent">
+    <!-- Tabs Titles -->
+
+    <!-- Icon -->
+    <div class="fadeIn first">
+        <i class="fas fa-sign-in-alt" style="font-size: 200%;margin-top: 30px;"></i>
+    </div>
+
+    <!-- Login Form -->
+    <form action="/signup" method="POST">
+      <input type="text" id="email" class="fadeIn second" name="email" placeholder="Email">
+      <input type="password" id="password" class="fadeIn third" name="password" placeholder="password">
+      <input type="password" id="confirmpassword" class="fadeIn third" name="confirmpassword" placeholder="Confirm password">      
+      <input type="submit" class="fadeIn fourth" value="Sign Up">
+    </form>
+   <!-- Remind Passowrd -->
+   <div id="formFooter">
+    <div style="width: 100%;margin-top: 20px;">
+        <a class="btn btn-outline-primary" href="/login">Login</a>
+      </div>
+  </div>
+
+  </div>
+</div>
+
+
+<%- include('../includes/end.ejs') %>

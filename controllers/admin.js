@@ -1,11 +1,17 @@
 const Product = require('../models/product');
 
 exports.getAddProduct = (req, res, next) => {
+
+  if (!req.session.isLoggedIn){
+    return res.redirect('/');
+  }
+  //https://jira.mongodb.org/browse/NODE-1401
   Product.find().then(
     res.render('admin/edit-product', {
       pageTitle: 'Add Product',
       path: '/admin/add-product/',
-      editing: false
+      editing: false,
+      isAuthenticated: req.session.isLoggedIn      
     }))
     .catch(err => {
       console.log(err);
@@ -56,7 +62,8 @@ exports.getEditProduct = (req, res, next) => {
       pageTitle: 'Edit Product',
       path: '/admin/edit-product/',
       editing: editMode,
-      product: product
+      product: product,
+      isAuthenticated: req.session.isLoggedIn  
     });
   })
   .catch(err => {console.log(err)});
@@ -103,7 +110,8 @@ exports.getProducts = (req, res, next) => {
         prods: products,
         pageTitle: 'Admin Products',
         path: '/admin/products',
-        activeShop: true
+        activeShop: true,
+        isAuthenticated: req.session.isLoggedIn  
       });
   }).catch(err => {
       console.log(err);
