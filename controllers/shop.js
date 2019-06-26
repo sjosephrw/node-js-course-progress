@@ -11,8 +11,7 @@ exports.getProducts = (req, res, next) => {
         pageTitle: 'All products.',
         path: '/products',
         hasProducts: products.length > 0,
-        activeProducts: true,
-        isAuthenticated: req.session.isLoggedIn  
+        activeProducts: true
       });
   }).catch( err => {
         console.log(err);
@@ -29,8 +28,7 @@ exports.getProduct = (req, res, next) => {
     res.render('shop/product-detail', {
       product: product, 
       pageTitle: product.title,
-      path: '/products',
-      isAuthenticated: req.session.isLoggedIn  
+      path: '/products'
     });
   }).catch(err => {
       console.log(err);
@@ -44,7 +42,7 @@ exports.getIndex = (req, res, next) => {
       pageTitle: 'Shop',
       path: '/',
       activeShop: true,
-      isAuthenticated: req.session.isLoggedIn  
+      csrfToken: req.csrfToken()  
     });
   }).catch(err => {
       console.log(err);
@@ -63,8 +61,7 @@ exports.getCart = (req, res, next) => {
       res.render('shop/cart', {
         products: products,
         pageTitle: 'Your shopping Cart',
-        path: '/cart',
-        isAuthenticated: req.session.isLoggedIn  
+        path: '/cart' 
       });      
   })
   .catch(err => {console.log(err);});
@@ -109,7 +106,7 @@ exports.createOrders = (req, res, next) => {
 
       const order = new Order({
         user: {
-          name: req.user.name,
+          email: req.user.email,
           userId: req.user
         },
         products: products
@@ -133,8 +130,7 @@ exports.getOrders = (req, res, next) => {
     res.render('shop/orders', {
       pageTitle: 'My Orders',
       path: '/orders',
-      orders: orders,
-      isAuthenticated: req.session.isLoggedIn  
+      orders: orders
     })
   })
   .catch(err => {console.log(err);});
@@ -143,8 +139,8 @@ exports.getOrders = (req, res, next) => {
 };
 
 exports.getOrderDetails = (req, res, next) => {
-  const ordId = req.body.orderId;
-  Order.find(ordId)
+  const ordId = req.params.orderId;
+  Order.find({'_id': ordId})
     .then(orders => {
       console.log(orders[0].user);
       console.log(orders[0].products);      
@@ -152,8 +148,7 @@ exports.getOrderDetails = (req, res, next) => {
       res.render('shop/order-details', {
         pageTitle: 'Your Order details',
         path: '/order-details',
-        orders: orders[0].products,
-        isAuthenticated: req.session.isLoggedIn  
+        orders: orders[0].products
       });
     })
     .catch(err => {console.log(err)});

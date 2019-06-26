@@ -19,7 +19,8 @@
                 <div class="form-group">
                     <label for="description">Description:</label>
                     <textarea class="form-control" id="description" name="description"></textarea>
-                </div>                                                
+                </div>    
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">                                            
                 <button type="submit" class="btn btn-primary">Submit</button>
             </form> 
         </div>       

@@ -20,7 +20,8 @@
                     <label for="description">Description:</label>
                     <textarea class="form-control" id="description" name="description"><% if(editing){ %><%= product.description %><% } %></textarea>
                 </div>   
-                
+                <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+
                 <% if (editing){ %>
                     <input type="hidden" name="productId" value="<%= product._id %>">
                 <% } %>                

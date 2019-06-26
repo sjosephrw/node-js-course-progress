@@ -24,24 +24,15 @@
 
     <!-- Icon -->
     <div class="fadeIn first">
-        <i class="fas fa-sign-in-alt" style="font-size: 200%;margin-top: 30px;"></i>
+            <i class="fas fa-lock" style="font-size: 200%;margin-top: 30px;"></i>
     </div>
 
     <!-- Login Form -->
-    <form action="/login" method="POST">
+    <form action="/reset" method="POST">
       <input type="text" id="email" class="fadeIn second" name="email" placeholder="Email">
-      <input type="password" id="password" class="fadeIn third" name="password" placeholder="Password">
-      <input type="hidden" name="_csrf" value="<%= csrfToken %>">
-      <input type="submit" class="fadeIn fourth" value="Log In">
+         <input type="hidden" name="_csrf" value="<%= csrfToken %>">
+      <input type="submit" class="fadeIn fourth" value="Reset Password">
     </form>
-
-    <!-- Remind Passowrd -->
-    <div id="formFooter">
-      <a class="underlineHover" href="/reset">Forgot Password?</a>
-      <div style="width: 100%;margin-top: 20px;">
-        <a class="btn btn-outline-primary" href="/signup">Sign Up</a>
-      </div>
-    </div>
 
   </div>
 </div>
