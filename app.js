@@ -13,7 +13,7 @@ const mongoConnect = require('./util/database').mongoConnect;
 
 const User = require('./models/user');
 
-const MONGO_URI = 'mongodb+srv://joseph:MGL12039487abcde@nodejsproject-wqkqi.mongodb.net/shop?retryWrites=true&w=majority';
+const MONGO_URI = 'Database connection URL';
 
 const app = express();
 const store = new MongoStore({
@@ -33,7 +33,7 @@ const authRoutes = require('./routes/auth');
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
-    secret: "GBW10293894756<>?{}_+", 
+    secret: "SESSION SECRET KEY", 
     resave: false, 
     saveUninitialized: false, 
     store: store
