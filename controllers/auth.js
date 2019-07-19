@@ -1,14 +1,17 @@
+import {appConstants} from "../../constants";
+
 const crypto = require('crypto');//to generate password reset token
 const bcrypt = require('bcryptjs');//to encrypt password
 const User = require('../models/user');
 const nodemailer = require('nodemailer');//to use with sendgrid
+const { validationResult } = require('express-validator');
 
 const sendgridTransport = require('nodemailer-sendgrid-transport');
 
 const transporter = nodemailer.createTransport(sendgridTransport({
   auth: {
-    api_user: 'sjosephwr12',
-    api_key: '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'
+    api_user: appConstants.sendGridUser,
+    api_key: appConstants.sendGridApiKey
   }
 }));
 
@@ -16,7 +19,9 @@ exports.getLogin = (req, res, next) => {
     res.render('auth/login', {
         pageTitle: 'Login.',
         path: '/login',
-        errorMessage: req.flash('error')       
+        errorMessage: req.flash('error'),
+        successMessage: req.flash('success'),
+        oldInput: {email: '', password: ''}
     });
   };
 
@@ -25,11 +30,30 @@ exports.getLogin = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
 
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log(errors.array());
+      return res.status(422).render('auth/login', {
+        path: '/login',
+        pageTitle: 'Login',
+        errorMessage: errors.array(),
+        successMessage: Array(),
+        oldInput: {email: email, password: password}
+      });
+    }
+    
     User.findOne({email: email})
       .then(user => {
         if (!user){
-          req.flash('error', 'Invalid Email or password');
-          return res.redirect('/login');//if there is a error I think we can chain another then block here with a flash error message
+          const errors = new Array();
+          errors.push({msg: 'Invalid email or password.'});
+          return res.status(422).render('auth/login', {
+            path: '/login',
+            pageTitle: 'Login',
+            errorMessage: errors,
+            successMessage: Array(),
+            oldInput: {email: email, password: password}
+          });
         }
           //compare returns a promise
           bcrypt.compare(password, user.password)
@@ -41,8 +65,18 @@ exports.getLogin = (req, res, next) => {
                   console.log(err);
                   res.redirect('/');
               });
+            } else {
+              const errors = new Array();
+              errors.push({msg: 'Invalid email or password.'});
+              return res.status(422).render('auth/login', {
+                path: '/login',
+                pageTitle: 'Login',
+                errorMessage: errors,
+                successMessage: Array(),
+                oldInput: {email: email, password: password}
+              });
             }
-            res.redirect('/login');//no need to return here because we need to check the catch block err code if any errors exist.
+
           })
           .catch(err => {
             console.log(err);
@@ -64,47 +98,50 @@ exports.getLogin = (req, res, next) => {
     res.render('auth/signup', {
         pageTitle: 'Signup.',
         path: '/signup',
-        errorMessage: req.flash('error')                  
+        errorMessage: req.flash('error'),
+        successMessage: req.flash('success'),
+        oldInput: {email: '', password: '', confirmpassword: ''}
     });
   };
 
   exports.postSignup = (req, res, next) => {
     const email = req.body.email;
     const password = req.body.password;
-    const confirmPassword = req.body.confirmpassword;
-
-    User.findOne({email: email})
-    .then(userDoc => {
-      if (userDoc){
-        req.flash('error', 'That Email already exists, please pick a different one');
-        return res.redirect('/signup');//we will redirect to sign up and return to prevent the code below from being executed
-      }
-      return bcrypt.hash(password, 12);
-    })
-    .then(hashedPassword => {
-      const user = new User({
-        email: email,
-        password: hashedPassword,
-        cart: { items:[] }
+  
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log(errors.array());
+      return res.status(422).render('auth/signup', {
+        path: '/signup',
+        pageTitle: 'Signup',
+        errorMessage: errors.array(),
+        successMessage: Array(),
+        oldInput: {email: email, password: password, confirmpassword: req.body.confirmpassword}
       });
-      return user.save();//we are returning here so we can chain another then() block below
-    })
-    .then(result => {
-      res.redirect('/login'); 
-      return transporter.sendMail({
-        to: email,
-        from: 'shop@node-js-project.com',
-        subject: 'Registration Successful!',
-        html: '<h1>Registration Successful.</h1>'
+    }
+  
+    bcrypt
+      .hash(password, 12)
+      .then(hashedPassword => {
+        const user = new User({
+          email: email,
+          password: hashedPassword,
+          cart: { items: [] }
+        });
+        return user.save();
+      })
+      .then(result => {
+        res.redirect('/login');
+        // return transporter.sendMail({
+        //   to: email,
+        //   from: 'shop@node-complete.com',
+        //   subject: 'Signup succeeded!',
+        //   html: '<h1>You successfully signed up!</h1>'
+        // });
       })
       .catch(err => {
         console.log(err);
       });
-    })
-    .catch(err => {
-      console.log(err);
-    });
-
   };
 
 
@@ -112,7 +149,8 @@ exports.getLogin = (req, res, next) => {
     res.render('auth/reset', {
       pageTitle: 'Reset Password.',
       path: '/reset',
-      errorMessage: req.flash('error')                  
+      errorMessage: req.flash('error'),
+      successMessage: req.flash('success')                    
     });
   };
 
@@ -137,13 +175,14 @@ exports.getLogin = (req, res, next) => {
         }
       })
       .then(result => {
-        res.redirect('/');
+        req.flash('success', 'http://localhost:3000/new-password/${token}');//dont use this in production
+        res.redirect('/reset');
         return transporter.sendMail({
           to: req.body.email,
           from: 'no-reply@node-js-project.com',
           subject: 'Password Reset!',
           html: `<p>You requested a password reset </p>
-                 <p><a href="http://localhost:3000/reset/${token}">Click Here</a>to do so!</p> 
+                 <p><a href="http://localhost:3000/new-password/${token}">Click Here</a>to do so!</p> 
           `
         })
       })
@@ -153,4 +192,58 @@ exports.getLogin = (req, res, next) => {
     
     });
   
+  };
+
+  exports.getNewPassword = (req, res, next) => {
+    const token = req.params.token;
+
+    User.findOne({resetToken: token, resetTokenExpiration: {$lt: Date.now()}})
+    .then(user => {
+
+      if (!user){
+        req.flash('error', 'Invalid Token or Token expired.');
+        return res.redirect('/reset');//if there is a error I think we can chain another then block here with a flash error message
+      }      
+
+      res.render('auth/new-password', {
+        pageTitle: 'New Password.',
+        path: '/new-password',
+        errorMessage: req.flash('error'),
+        userId: user._id.toString(),
+        token: token,
+        resetTokenExpiration: user.resetTokenExpiration                  
+      });
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
+  };
+
+  exports.postNewPassword = (req, res, next) => {
+
+    const token = req.body.token;
+    const userId = req.body.userId;
+    const newPassword = req.body.password;
+    let user;
+
+    User.findOne({resetToken: token, resetTokenExpiration: {$lt: Date.now()}, _id: userId})
+    .then(user => {
+      resetUser = user;
+      return bcrypt.hash(newPassword, 12);
+    })
+    .then(hashedPassword => {
+      resetUser.password = hashedPassword;      
+      resetUser.token = undefined;
+      resetUser.resetTokenExpiration = undefined;
+      return resetUser.save();
+    })
+    .then(result => {
+      req.flash('success', 'Password successfully reset. Please login.');
+      res.redirect('/login');
+    })
+    .catch(err => {
+      console.log(err);
+    });
+
   };

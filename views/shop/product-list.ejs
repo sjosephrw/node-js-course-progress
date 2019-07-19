@@ -6,21 +6,25 @@
     <div class="row">
     <% 
         if (prods.length > 0) { 
-        let i = 0;        
+        let i = 0; 
+        const img = '';        
     %>
 
 
 
     <% 
         for (let product of prods) { 
-        i = i + 1;    
+        i = i + 1; 
+        
+  
     %>
 
         <div class="col-12 col-sm-12 col-md-4 col-lg-4">
                 <div class="card" style="width: 100%;font-size: 70% !important;">
                     <div class="card-header">Price: $<%= product.price %></div>
                         <div class="card-body">
-                            <img class="card-img-top" src="<%= product.imageUrl %>" alt="<%= product.title %>">
+                            <!--https://stackoverflow.com/questions/13221760/nodejs-ejs-helper-functions-->
+                            <img class="card-img-top" src="<%= doesFileExist(product.imageUrl) %>" alt="<%= product.title %>">
                             <div class="card-body">
                                 <h4 class="card-title text-center"><%= product.title %></h4>
                                 <p class="card-text text-center"><%= product.description %>.</p>
@@ -44,6 +48,7 @@
     <% } %>
     </div>
     </div>
+    <%- include('../includes/pagination.ejs', {path: path, hasPreviousPage: hasPreviousPage, hasNextPage: hasNextPage, previousPage: previousPage, currentPage: currentPage, lastPage: lastPage, nextPage: nextPage}) %>
     <!--https://dummyimage.com/600x400/000/fff-->
     </section>
 <%- include('../includes/end.ejs') %>

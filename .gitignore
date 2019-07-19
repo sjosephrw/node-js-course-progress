@@ -2,3 +2,5 @@
 node_modules/
 #ignore .vscode folder
 .vscode/
+#ignore the important folder
+important/

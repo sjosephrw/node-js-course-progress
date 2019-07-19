@@ -13,7 +13,7 @@
             <div class="row">
                 <div class="col-12 text-center">
                     <h3>Order Details</h3>
-                    <p style="font-size: 90%;">These are the orderdetails for this order.</p>
+                    <p style="font-size: 90%;">These are the order details for this order. You can download the invoicde by <a href="/order-invoice/<%= orderId %>">Clicking Here</a></p>
                 </div>
             </div>
         </div>
@@ -26,7 +26,7 @@
         orders.forEach(p => {
 %>           
         <div class="list-group" style="font-size: 70%;">
-            <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;<%= p.product.title %> (Quantity - <%= p.quantity %>)&nbsp;<img style="float:right;" src="<%= p.product.imageUrl %>" alt="Product Image" width="100px" height="auto"></a>
+            <a href="#" class="list-group-item list-group-item-action"><i class="fas fa-info-circle"></i>&nbsp;&nbsp;<%= p.product.title %> (Quantity - <%= p.quantity %>)&nbsp;<img style="float:right;" src="http://localhost:3000/<%= p.product.imageUrl %>" alt="Product Image" width="100px" height="auto"></a>
             <div class="clearfix"></div>
         </div>
         <% 

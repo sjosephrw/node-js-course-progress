@@ -35,7 +35,8 @@
                         <div style="width: 100%;">
                             <div class="btn-group" style="width: 100%;">
                                 <a href="/admin/edit-product/<%= product._id %>?edit=true" class="btn btn-outline-primary"><i class="far fa-edit"></i></a>
-                                <a href="/admin/delete-product/<%= product._id %>" class="btn btn-outline-danger"><i class="fas fa-trash"></i></a>
+                                <!--<a href="/admin/delete-product/<%= product._id %>" class="btn btn-outline-danger" data-animal-type="<%= product._id %>"><i class="fas fa-trash"></i></a>-->
+                                <a href="#" class="btn btn-outline-danger" id="product-delete" data-productId="<%= product._id %>" data-csrf="<%= csrfToken %>" onclick="deleteProduct(this)"><i class="fas fa-trash"></i></a>                                
                                 <a href="#" class="btn btn-outline-warning"><i class="fas fa-check"></i></a>
                             </div>  
                         </div>                 
@@ -58,7 +59,50 @@
         <% } %>
         </div>
         </div>
+
+        <%- include('../includes/pagination.ejs', {path: path, hasPreviousPage: hasPreviousPage, hasNextPage: hasNextPage, previousPage: previousPage, currentPage: currentPage, lastPage: lastPage, nextPage: nextPage}) %>
+
         <!--https://dummyimage.com/600x400/000/fff-->
         </section>
 
 <%- include('../includes/end.ejs') %>
+<script>
+    const deleteProduct = (btn) => {
+        console.log('Product deleted.');
+        //the data attribute did not work when it was like this 'data-product-id'
+        //console.log(btn.getAttribute('data-productId'));
+        //console.log(btn.getAttribute('data-csrf'));
+        const prodId = btn.getAttribute('data-productId');
+        const csrf = btn.getAttribute('data-csrf');
+
+        const productElement = btn.closest('.card');
+
+        console.log(productElement);
+
+        fetch(`/admin/product/${prodId}`, {
+            method: 'DELETE',
+            headers: {
+                'csrf-token': csrf
+            }
+        })
+        .then(result => {
+            return result.json();
+        })
+        .then(data => {
+            console.log(data);
+            productElement.remove();//works on modern browsers
+            //productElement.parentNode.removeChild(productElement);//all browser support
+
+            //reload the page in 2 seconds and restore pagination to it's normal state
+            setTimeout(function(){ 
+                location.reload();
+            }, 2000);
+            
+
+        })
+        .catch(err => {
+            console.log(err);
+        });
+
+    };
+</script>

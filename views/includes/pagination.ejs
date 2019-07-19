@@ -1,0 +1,23 @@
+<div class="container">
+        <div class="row">
+            <div class="col-12" style="padding-top: 20px;">
+                <ul class="pagination pagination-lg">
+                    <% if(hasPreviousPage){ %>    
+                        <li class="page-item"><a class="page-link" href="<%= path %>/?page=<%= previousPage %>">Previous</a></li>
+                        <li class="page-item"><a class="page-link" href="<%= path %>/?page=<%= previousPage %>"><%= previousPage %></a></li>                    
+                    <% } %>  
+
+                        <li class="page-item"><a class="page-link" href="#"><%= currentPage %></a></li>
+             
+                    <% if(lastPage !== currentPage && nextPage !== lastPage){ %>  
+                        <li class="page-item"><a class="page-link" href="<%= path %>/?page=<%= lastPage %>">...<%= lastPage %></a></li>                    
+                    <% } %>                         
+
+                    <% if(hasNextPage){ %>  
+                        <li class="page-item"><a class="page-link" href="<%= path %>/?page=<%= nextPage %>"><%= nextPage %></a></li>                    
+                        <li class="page-item"><a class="page-link" href="<%= path %>/?page=<%= nextPage %>">Next</a></li>
+                    <% } %> 
+                </ul>
+            </div>
+        </div>
+    </div>
