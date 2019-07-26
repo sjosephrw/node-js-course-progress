@@ -1,4 +1,4 @@
-import {appConstants} from "../../constants";
+const appConstants = require("../important/constants");
 
 const fs = require('fs');
 const path = require('path');
@@ -9,6 +9,10 @@ const Order = require('../models/order');
 
 const PDFDocument = require('pdfkit');
 
+//importing helpers
+const shopHelper = require('../helpers/shop');
+
+
 // Set your secret key: remember to change this to your live secret key in production
 // See your keys here: https://dashboard.stripe.com/account/apikeys
 const stripe = require('stripe')(appConstants.stripeSecretKey);
@@ -17,6 +21,20 @@ const stripe = require('stripe')(appConstants.stripeSecretKey);
 //const path = '/public/img';
 
 const ITEMS_PER_PAGE = 3;
+
+  let checkFileExists = path => new Promise((resolve, reject) => {
+
+    fs.access(path, fs.F_OK, (err) => {
+      if (err) {
+        console.error(err)
+        resolve('https://dummyimage.com/600x400/000/fff');
+      }
+    
+      //file exists
+      resolve('http://localhost:3000/'+path);
+    })  
+
+  });
 
   const doesFileExist = (fileName) => {
     // fs.access(fileName, fs.F_OK, (err) => {
@@ -114,8 +132,7 @@ exports.getProducts = (req, res, next) => {
         //   };
         // })
       });
-
-      console.log(products);
+      //console.log(products);
   
   }).catch( err => {
         console.log(err);
@@ -134,6 +151,8 @@ exports.getProduct = (req, res, next) => {
       pageTitle: product.title,
       path: '/products'
     });
+    //console.log('getProduct controller  '+JSON.stringify(req.session.cart) + ' '+ JSON.stringify(req.session.cartTotal));
+
   }).catch(err => {
       console.log(err);
   });
@@ -153,37 +172,226 @@ exports.getIndex = (req, res, next) => {
   });
 };
 
+// exports.getCart = (req, res, next) => {
+  
+//   //https://dev.to/jcolborndropdeadgames/user-authentication-with-expressjs-44od
+
+//   if (req.user){//if logged in
+
+//     req.user
+//     .populate('cart.items.productId')
+//     .execPopulate()
+//     .then(user => {
+        
+//         const products = user.cart.items;
+//         console.log(products);
+  
+//         res.render('shop/cart', {
+//           products: products,
+//           pageTitle: 'Your shopping Cart',
+//           path: '/cart' 
+//         });      
+//     })
+//     .catch(err => {console.log(err);});
+
+//   } else {//if not logged in display sesssion cart
+
+//     if (req.session.cart){
+
+//       const products = req.session.cart;
+
+//       const a = products.map(element => {
+//         return element._id;
+//       });
+
+//       const quantitiesInCart = products.map(element => {
+//         return element.qty;
+//       });      
+
+//         let promises = [];
+
+//         a.forEach(el => {
+//           promises.push(shopHelper.getProductTitle(el));
+//         })
+
+//         Promise.all(promises)
+//         .then((products) => {
+
+//             const newArray = [];
+
+//             for (let x = 0;x < products.length; x++){
+
+//               let tempObj = {
+//                 '_id': '',
+//                 'title': '',
+//                 'price': '',
+//                 'imageUrl': '',
+//                 'qty': ''                
+//              };
+
+//               tempObj._id = products[x]._id;
+//               tempObj.title = products[x].title;
+//               tempObj.price = products[x].price;
+//               tempObj.imageUrl = `http://localhost:3000/${products[x].imageUrl}`;
+//               tempObj.qty = quantitiesInCart[x];
+//               newArray.push(tempObj);
+//             }
+            
+//             // console.log(newArray);
+
+//             res.render('shop/cart', {
+//               products: newArray,
+//               pageTitle: 'Your shopping Cart',
+//               path: '/cart',
+//               doesFileExist: doesFileExist
+//             });
+
+//         }).catch(err => console.log(err));
+        
+//     } else {// if we dont res.render() the view below when the session cart is empty nothing is displayed 
+//       res.render('shop/cart', {
+//         products: [],
+//         pageTitle: 'Your shopping Cart',
+//         path: '/cart'
+//       });
+//     }
+//   }
+// };
+
+
 exports.getCart = (req, res, next) => {
-  req.user
-  .populate('cart.items.productId')
-  .execPopulate()
-  .then(user => {
-      
-      const products = user.cart.items;
-      console.log(products);
+  
+  //https://dev.to/jcolborndropdeadgames/user-authentication-with-expressjs-44od
 
-      res.render('shop/cart', {
-        products: products,
-        pageTitle: 'Your shopping Cart',
-        path: '/cart' 
+  if (req.user){//if logged in
+
+    req.user
+    .populate('cart.items.productId')
+    .execPopulate()
+    .then(user => {
+        
+        const products = user.cart.items;
+        //console.log(products);
+  
+        res.render('shop/cart', {
+          products: products,
+          pageTitle: 'Your shopping Cart',
+          path: '/cart' 
+        });      
+    })
+    .catch(err => {console.log(err);});
+
+  } else {//if not logged in display sesssion cart
+
+    if (req.session.cart){
+
+      const products = req.session.cart;
+
+      const a = products.map(element => {
+        return element._id;
+      });
+
+      const quantitiesInCart = products.map(element => {
+        return element.qty;
       });      
-  })
-  .catch(err => {console.log(err);});
+
+        let promises = [];
+
+        a.forEach(el => {
+          promises.push(shopHelper.getProductTitle(el));//gets not only the title but all product details.
+        })
+
+        Promise.all(promises)//get the product details using this promise
+        .then((products) => {
+          //console.log(products);
+          const a = products.map(element => {
+            return element.imageUrl;
+          });
+            console.log(a);
+            let promises = [];
+    
+            a.forEach(el => {
+              promises.push(checkFileExists(el));
+            })
+    
+            Promise.all(promises)//then check whether the images related to each product exists using this promise
+            .then((imgs) => {
+                const newArray = [];
+    
+                for (let x = 0;x < products.length; x++){
+    
+                  let tempObj = {
+                    '_id': '',
+                    'title': '',
+                    'price': '',
+                    'imageUrl': ''                
+                 };
+    
+                  tempObj._id = products[x]._id;
+                  tempObj.title = products[x].title;
+                  tempObj.price = products[x].price;
+                  tempObj.imageUrl = imgs[x];
+                  tempObj.qty = quantitiesInCart[x];
+                  newArray.push(tempObj);
+                }
+            console.log(newArray);
+
+            res.render('shop/cart', {
+              products: newArray,
+              pageTitle: 'Your shopping Cart',
+              path: '/cart'
+            });    
+
+        }).catch(err => console.log(`Img promise error ${err}`));
+        
+
+
+        }).catch(err => console.log(err));
+        
+    } else {// if we dont res.render() the view below when the session cart is empty nothing is displayed 
+      res.render('shop/cart', {
+        products: [],
+        pageTitle: 'Your shopping Cart',
+        path: '/cart'
+      });
+    }
+  }
+
+  console.log(req.session);
+
 };
-
-
 
 exports.postCart = (req, res, next) => {
   const prodId = req.body.productId;
-  Product.findById(prodId)
+  if (req.user){
+    Product.findById(prodId)
     .then(product => {
       return req.user.addToCart(product);
     })
     .then(result => {
-      console.log(result);
+      //console.log(result);
       res.redirect('/cart');
     })
-  .catch(err => {console.log(err)});
+    .catch(err => {console.log(err);});
+  
+  } else {
+    //if there are items in the cart require it or create a cart instance with a empty obj.
+    const cart = new Cart(req.session.cart ? req.session.cart : []
+      , req.session.cartTotal ? req.session.cartTotal : 0);
+    
+    Product.findById(prodId)
+    .then(product => {
+      cart.addProduct(product);
+      req.session.cart = cart.items;
+      req.session.cartTotal = cart.totalPrice;
+      req.session.save();
+      //console.log(req.session);
+      res.redirect('/cart');      
+    })
+    .catch(err => {console.log(err);});  
+  }
+
+
 
   // Product.findById(prodId, product => {
   //   Cart.addProduct(prodId, product.price);
@@ -193,10 +401,31 @@ exports.postCart = (req, res, next) => {
 
 exports.getCartDeleteProduct = (req, res, next) => {
   const prodId = req.params.productId;
-  req.user.removeFromCart(prodId).then(result => {
-    res.redirect('/cart');  
-  })
-  .catch(err => {console.log(err);});
+
+  if(req.user){
+
+    req.user.removeFromCart(prodId).then(result => {
+      res.redirect('/cart');  
+    })
+    .catch(err => {console.log(err);});
+  
+  } else {//deleting guest users product from the cart
+    //if there are items in the cart require it or create a cart instance with a empty obj.
+    const cart = new Cart(req.session.cart ? req.session.cart : []
+      , req.session.cartTotal ? req.session.cartTotal : 0);
+    
+    Product.findById(prodId)
+    .then(product => {
+      cart.deleteProduct(product, product.price);
+      req.session.cart = cart.items;
+      req.session.cartTotal = cart.totalPrice;
+      req.session.save();
+      //console.log(req.session);
+      res.redirect('/cart');      
+    })
+    .catch(err => {console.log(err);}); 
+  }
+
 };
 
 exports.getCheckout = (req, res, next) => {

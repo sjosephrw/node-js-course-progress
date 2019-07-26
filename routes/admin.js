@@ -8,6 +8,7 @@ const adminController = require('../controllers/admin');
 
 const isAuth = require('../middleware/is-auth');
 
+//Router level middleware router.use
 const router = express.Router();
 
 router.get('/products', isAuth, adminController.getProducts);

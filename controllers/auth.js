@@ -1,4 +1,4 @@
-import {appConstants} from "../../constants";
+const appConstants = require("../important/constants");
 
 const crypto = require('crypto');//to generate password reset token
 const bcrypt = require('bcryptjs');//to encrypt password

@@ -22,11 +22,11 @@ let checkFileExists = path => new Promise((resolve, reject) => {
 
 });
 
-async function myFunction(url){
-  const feed = await checkFileExists(url);
-  // do whatever you need with feed below
-  return feed;
-}
+// async function myFunction(url){
+//   const feed = await checkFileExists(url);
+//   // do whatever you need with feed below
+//   return feed;
+// }
 
     // if (err) reject('https://dummyimage.com/600x400/000/fff');
     // //file exists
