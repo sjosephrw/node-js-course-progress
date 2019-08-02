@@ -85,6 +85,17 @@ module.exports = class Cart{
 
   }
 
+  // //used in auth.js controller postLogin method
+  // getGuestCartProductIds(){
+
+  //   const productIds = this.items.map(element => {
+  //     return element._id;
+  //   });
+
+  //   return productIds;
+
+  // }
+
   // static addProduct(id, productPrice) {
   //   // Fetch the previous cart
   //   fs.readFile(p, (err, fileContent) => {

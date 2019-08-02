@@ -198,5 +198,47 @@ userSchema.methods.addToCart = function(product){
       return this.save();
     }
 
+    // userSchema.methods.combineCarts = function(cartObj){
+    //   this.cart = { items: cartObj };
+    //   return this.save();
+    // }    
+
+  //combine guest user and logged in user carts
+//   userSchema.methods.combineCarts = function(product){
+
+//     const cartProductIndex = this.cart.items.findIndex(cp => {
+//         return cp.productId.toString() === product._id.toString();
+//     });
+    
+//       let newQuantity = 0;
+//       const updatedCartItems = [...this.cart.items];
+  
+//       if (cartProductIndex >= 0) {
+//         newQuantity = this.cart.items[cartProductIndex].quantity + product.qty;
+//         updatedCartItems[cartProductIndex].quantity = newQuantity;
+//       } else {
+        
+//         let newQuantity = 1;
+
+//         updatedCartItems.push({
+//           productId: product._id,
+//           quantity: newQuantity
+//         });
+//       }
+//       const updatedCart = {
+//         items: updatedCartItems
+//       };
+//       this.cart = updatedCart;
+      
+//       // return this.save()
+//       // .then((data)=>{
+//       //   console.log(`User Model ${data}`);
+//       // }).catch((error)=>{
+//       //   console.log(`User Model ${error}`);
+//       // });  
+
+//       return this.save();
+// }
+
 //'User' - the db collection name mongoose converts it to lowercase 'user' to get the collection name
 module.exports = mongoose.model('User', userSchema);

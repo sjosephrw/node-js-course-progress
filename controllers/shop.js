@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const Product = require('../models/product');
-const Cart = require('../models/cart');//not used anymore
+const Cart = require('../models/cart');
 const Order = require('../models/order');
 
 const PDFDocument = require('pdfkit');
@@ -265,6 +265,9 @@ exports.getCart = (req, res, next) => {
 
   if (req.user){//if logged in
 
+    //https://stackoverflow.com/questions/31549857/mongoose-what-does-the-exec-function-do
+    //https://riptutorial.com/mongoose/example/22494/a-simple-mongoose-populate-example
+    
     req.user
     .populate('cart.items.productId')
     .execPopulate()
@@ -384,7 +387,10 @@ exports.postCart = (req, res, next) => {
       cart.addProduct(product);
       req.session.cart = cart.items;
       req.session.cartTotal = cart.totalPrice;
-      req.session.save();
+      req.session.save(err => {//we are returning to prevent the code below the err=> callback from being executed.
+        console.log(err);
+        //res.redirect('/');
+      });
       //console.log(req.session);
       res.redirect('/cart');      
     })
